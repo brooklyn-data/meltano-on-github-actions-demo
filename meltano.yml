@@ -1,9 +1,18 @@
 version: 1
 plugins:
   extractors:
-  - name: tap-example # TODO add a real tap's configuration here https://docs.meltano.com/guide/plugin-management#adding-a-plugin-to-your-project
-    # Load into the example schema in Snowflake TODO edit as needed
-    load_schema: example
+  - name: tap-smartsheet
+    namespace: tap_smartsheet
+    pip_url: git+https://github.com/brooklyn-data/tap-smartsheet.git
+    capabilities:
+    - state
+    - catalog
+    - discover
+    settings:
+    - name: smartsheet_access_token
+    select:
+    - sheet_ice_cream.*
+    load_schema: smartsheet
   loaders:
   # target-jsonl is used for testing, files are stored in the output directory
   - name: target-jsonl
@@ -14,7 +23,7 @@ plugins:
     pip_url: pipelinewise-target-snowflake
     config:
       # dbname and file_format are overridden using environment variables in production
-      # TODO create required Snowflake objects per https://github.com/transferwise/pipelinewise-target-snowflake#pre-requirements
       dbname: meltano_dev
       file_format: meltano_dev.public.csv
       add_metadata_columns: true
+      primary_key_required: false

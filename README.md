@@ -1,4 +1,4 @@
-# Brooklyn Data Co's Meltano project
+# Brooklyn Data Co's Demo Meltano project
 
 This project has been generated using [Brooklyn Data Co.](https://brooklyndata.co/)'s [Meltano on GitHub Actions template](https://github.com/brooklyn-data/meltano-on-github-actions).
 
@@ -51,15 +51,7 @@ We use [pipelinewise-target-snowflake](https://github.com/transferwise/pipelinew
 Use development credentials and database of `MELTANO_DEV` configured as default in `meltano.yml` for local testing.
 ## Deployment
 
-This pipeline is deployed on GitHub Actions, and orchestrated by Meltano. Secrets are configured in GitHub actions per [this guide](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Note that configuration in `meltano.yml` is overridden by environment variables. The environment variables set are:
-
-# TODO - add to or modify as needed
-- `TARGET_SNOWFLAKE_ACCOUNT`
-- `TARGET_SNOWFLAKE_USERNAME`
-- `TARGET_SNOWFLAKE_PASSWORD`
-- `TARGET_SNOWFLAKE_DBNAME`
-- `TARGET_SNOWFLAKE_WAREHOUSE`
-- `TARGET_SNOWFLAKE_FILE_FORMAT`
+This pipeline is deployed on GitHub Actions, and orchestrated by Meltano. Secrets are configured in GitHub actions per [this guide](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Note that configuration in `meltano.yml` is overridden by environment variables configured in the workflow files.
 
 [Artifacts](https://docs.github.com/en/actions/advanced-guides/storing-workflow-data-as-artifacts) are used to persist Meltano's SQLite database between runs. Doing so enables pipelines to run incrementally, i.e. only load new or updated data in each run.
 

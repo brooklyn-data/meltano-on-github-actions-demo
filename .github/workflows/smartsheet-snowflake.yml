@@ -1,7 +1,7 @@
 
 on:
   schedule:
-    - cron: '0 8 * * *' # Every day at 8AM UTC - TODO update as needed
+    - cron: '0 8 * * *' # Every day at 8AM UTC
   workflow_dispatch: # workflow_dispatch enables the workflow to be triggered manually
 
 jobs:
@@ -11,7 +11,6 @@ jobs:
     steps:
       # Checkout the repository so that a path to the action.yml can be used
       - uses: actions/checkout@v2
-
       # Get the database files from the previous run, if exists
       - name: Download latest SQLite database artifact
         uses: dawidd6/action-download-artifact@v2
@@ -26,21 +25,18 @@ jobs:
         if: always() # Always run this step even if the prior failed due to no artifact found (this should only take effect if first time running)
         uses: ./
         env:
-          # TODO add and modify as needed and add to the repo's secrets
-
           TARGET_SNOWFLAKE_ACCOUNT: ${{ secrets.TARGET_SNOWFLAKE_ACCOUNT }}
           TARGET_SNOWFLAKE_USERNAME: MELTANO
           TARGET_SNOWFLAKE_PASSWORD: ${{ secrets.TARGET_SNOWFLAKE_PASSWORD }}
           TARGET_SNOWFLAKE_DBNAME: MELTANO
           TARGET_SNOWFLAKE_WAREHOUSE: MELTANO
           TARGET_SNOWFLAKE_FILE_FORMAT: meltano.public.csv
+          TAP_SMARTSHEET_SMARTSHEET_ACCESS_TOKEN: ${{ secrets.TAP_SMARTSHEET_SMARTSHEET_ACCESS_TOKEN }}
 
           MELTANO_DATABASE_URI: sqlite:////github/workspace/meltano.db
         with:
-          # TODO set correct tap and target names
-          args: meltano elt tap-example target-snowflake --job_id=meltano # job_id required to use incremental state, can be anything
+          args: meltano elt tap-smartsheet target-snowflake --job_id=meltano # job_id required to use incremental state, can be anything
       - name: Meltano Slack alert
-        # TODO configure SLACK_CHANNEL_ID and SLACK_BOT_TOKEN secrets in the repo
         if: failure() # Only run if one of the previous steps fails
         id: slack
         uses: slackapi/slack-github-action@v1.16.0
